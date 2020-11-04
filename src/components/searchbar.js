@@ -8,7 +8,10 @@ function SearchBar() {
     function getShows() {
         axios.get('http://api.tvmaze.com/search/shows?q=office')
             .then(response => {
-                console.log('response: ', response.data);
+                response.data.map(item => {
+                    let show = item.show;
+                    console.log('show:', show);
+                });
             })
             .catch(console.log)
 
