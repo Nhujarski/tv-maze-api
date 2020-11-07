@@ -6,7 +6,7 @@ function SearchBar() {
     const [shows, setShows] = useState([]);
 
     function getShows() {
-        axios.get('http://api.tvmaze.com/shows/1')
+        axios.get(' http://api.tvmaze.com/search/shows?q=office')
             .then(response => {
                 console.log(response.data);
                 setShows(response.data);
@@ -24,15 +24,17 @@ function SearchBar() {
             <table>
                 <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Description</th>
+                        <th>Show Name:</th>
+                        <th>Show Summary:</th>
                     </tr>
                 </thead>
                 <tbody>
                     {shows.map(show => (
                         <tr key={show.id}>
-                            <td>{show.name}</td>
+                            <td>{show.show.name}</td>
+                            <td>{show.show.summary}</td>
                         </tr>
+
                     ))}
                 </tbody>
             </table>
