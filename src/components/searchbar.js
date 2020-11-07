@@ -15,24 +15,31 @@ function SearchBar() {
 
     };
 
+    const styleObj = {
+        fontSize: 14,
+        color: "#4a54f1",
+        textAlign: "center",
+    }
+    const rowStyle = {
+        border: "2px solid black"
+    }
 
 
-    // 
     return (
         <div>
             <button onClick={getShows}>Get Show</button>
-            <table>
+            <table style={styleObj}>
                 <thead>
-                    <tr>
+                    <tr style={rowStyle}>
                         <th>Show Name:</th>
                         <th>Show Summary:</th>
                     </tr>
                 </thead>
                 <tbody>
                     {shows.map(show => (
-                        <tr key={show.id}>
-                            <td>{show.show.name}</td>
-                            <td>{show.show.summary}</td>
+                        <tr key={show.id} style={rowStyle}>
+                            <td style={rowStyle}>{show.show.name}</td>
+                            <td style={rowStyle}>{show.show.summary}</td>
                         </tr>
 
                     ))}
