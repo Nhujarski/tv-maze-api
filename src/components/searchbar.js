@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 // import { navigate } from '@reach/router'
 import axios from 'axios';
+import './searchBarStyles.css';
+
 
 function SearchBar() {
+    // function used to get shows using axios get call to the api and return a list of shows matching seaarch params----
     const [shows, setShows] = useState([]);
     function getShows(event) {
         event.preventDefault()
@@ -17,16 +20,18 @@ function SearchBar() {
             .catch(console.log)
 
     };
+    // function to strip html tags from origional api call
     function stripHTMLFromString(str) {
         return str.replace(/(<([^>]+)>)/gi, "");
     }
-
+    // funtion used to handle input change of search bar-----------
     const [input, setInput] = useState("");
     function handleInputChange(event) {
         // console.log(event.target.value);
         setInput(event.target.value);
         // console.log("state input",input)
     }
+    // function used to get episode list for shows and then store them in use state hook.-------
     const [seasons, setSeasons] = useState([])
     const [currentSeason, setCurrentSeason] = useState({})
     async function getEpisodesList(showId) {
@@ -43,49 +48,45 @@ function SearchBar() {
     }
     useEffect(() => console.log("seasons", seasons), [seasons]);
     useEffect(() => console.log("current seasons", currentSeason), [currentSeason]);
-
-    const styleObj = {
-        fontSize: 14,
-        color: "#4a54f1",
-        textAlign: "center",
-    }
-    const rowStyle = {
-        border: "2px solid black"
-    }
+    // --------------------------------------------------
+    // ------inline style elements-------
+    // const styleObj = {
+    //     fontSize: 14,
+    //     color: "#4a54f1",
+    //     textAlign: "center",
+    // }
+    // const rowStyle = {
+    //     border: "2px solid black"
+    // }
+    //  ----------------------------
     return (
-        <div>
-            <form>
-                <input type="textarea" onChange={handleInputChange}></input>
-                <button onClick={getShows}>Get Show</button>
-            </form>
-            <table style={styleObj}>
-                <thead>
-                    <tr style={rowStyle}>
-                        <th>Show Name:</th>
-                        <th>Show Summary:</th>
-                        <th>IMG</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {shows.map(({ show }) => (
-                        <tr key={show.id} style={rowStyle}>
-                            <td style={rowStyle}>
-                                {show.name}
-                                <button onClick={(e) => getEpisodesList(show.id)}>Show Info</button>
-                            </td>
-                            <td style={rowStyle}>{show.summary}</td>
-                            <td>
-                                <img
-                                    className='show-img'
-                                    src={show.image && (show.image.medium || show.image.original || "")}
-                                    alt={show.name}
-                                    height={300} />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div >
+        <div className="container">
+            <div className="header-div">
+                <h3 className="header">Show Finder</h3>
+            </div>
+            <div>
+                <form className="wrapper">
+                    <img class="search-icon" alt="searchg glass" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDU2Ljk2NiA1Ni45NjYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDU2Ljk2NiA1Ni45NjY7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPHBhdGggZD0iTTU1LjE0Niw1MS44ODdMNDEuNTg4LDM3Ljc4NmMzLjQ4Ni00LjE0NCw1LjM5Ni05LjM1OCw1LjM5Ni0xNC43ODZjMC0xMi42ODItMTAuMzE4LTIzLTIzLTIzcy0yMywxMC4zMTgtMjMsMjMgIHMxMC4zMTgsMjMsMjMsMjNjNC43NjEsMCw5LjI5OC0xLjQzNiwxMy4xNzctNC4xNjJsMTMuNjYxLDE0LjIwOGMwLjU3MSwwLjU5MywxLjMzOSwwLjkyLDIuMTYyLDAuOTIgIGMwLjc3OSwwLDEuNTE4LTAuMjk3LDIuMDc5LTAuODM3QzU2LjI1NSw1NC45ODIsNTYuMjkzLDUzLjA4LDU1LjE0Niw1MS44ODd6IE0yMy45ODQsNmM5LjM3NCwwLDE3LDcuNjI2LDE3LDE3cy03LjYyNiwxNy0xNywxNyAgcy0xNy03LjYyNi0xNy0xN1MxNC42MSw2LDIzLjk4NCw2eiIgZmlsbD0iIzAwMDAwMCIvPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" />
+                    <input className="search" type="text" placeholder="Search" onChange={handleInputChange}></input>
+                    <button onClick={getShows} className="search-button">Search</button>
+                </form>
+            </div>
+            <div className="show-container">
+                {shows.map(({ show }) => (
+                    <div key={show.id} className="show-info">
+                        <h2>{show.name}</h2>
+                        <p>{show.summary}</p>
+                        <img
+                            className='show-img'
+                            src={show.image && (show.image.medium || show.image.original || "")}
+                            alt={show.name}
+                            height={300} />
+                        <button className="episodes-button" onClick={(e) => getEpisodesList(show.id)}>Shoe Episodes</button>
+                    </div>
+                ))}
+            </div>
+        </div>
+        // end of container
     )
 }
 
