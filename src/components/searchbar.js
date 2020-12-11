@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 // import { navigate } from '@reach/router'
 import axios from 'axios';
 import './searchBarStyles.css';
+import debounce from "lodash.debounce";
 
 
 function SearchBar() {
     // function used to get shows using axios get call to the api and return a list of shows matching seaarch params----
     const [shows, setShows] = useState([]);
+    const [input, setInput] = useState("");
     function getShows(event) {
         event.preventDefault()
-        axios.get(`http://api.tvmaze.com/search/shows?q=${input}`)
+        axios.get(`http://api.tvmaze.com/search/shows?q=${event.target.value}`)
             .then(({ data }) => {
                 // console.log(data);
                 data.map(item => (
@@ -25,9 +27,12 @@ function SearchBar() {
         return str.replace(/(<([^>]+)>)/gi, "");
     }
     // funtion used to handle input change of search bar-----------
-    const [input, setInput] = useState("");
+
+    const debouncedGetShows = debounce(getShows, 1000);
     function handleInputChange(event) {
-        // console.log(event.target.value);
+        console.log(event.target.value);
+        debouncedGetShows(event);
+
         setInput(event.target.value);
         // console.log("state input",input)
     }
@@ -57,7 +62,7 @@ function SearchBar() {
     // }
     // const rowStyle = {
     //     border: "2px solid black"
-    // }
+    // } added some comments in for git test purposes!!!!!!
     //  ----------------------------
     return (
         <div className="container">
@@ -74,14 +79,14 @@ function SearchBar() {
             <div className="show-container">
                 {shows.map(({ show }) => (
                     <div key={show.id} className="show-info">
-                        <h2>{show.name}</h2>
-                        <p>{show.summary}</p>
                         <img
                             className='show-img'
                             src={show.image && (show.image.medium || show.image.original || "")}
                             alt={show.name}
                             height={300} />
-                        <button className="episodes-button" onClick={(e) => getEpisodesList(show.id)}>Shoe Episodes</button>
+                        <h2>{show.name}</h2>
+                        <p>{show.summary}</p>
+                        <button className="episodes-button" onClick={(e) => getEpisodesList(show.id)}>Show Episodes</button>
                     </div>
                 ))}
             </div>
